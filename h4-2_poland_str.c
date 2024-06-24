@@ -9,6 +9,7 @@
 Данные на вход: 8 ^ 2 & 5 | ( 6 & 1 ) 
 Данные на выход: 8 2 5 & ^ 6 1 & |  */
 
+// Переделать под подитовые операции &, |, ^
 #include <stdio.h>
 #include <stdlib.h>
 #define BUFFER_SIZE 255
@@ -34,14 +35,14 @@ _Bool emptyStack() {
 }
 
 _Bool isOperator(char c) {
-    return c=='+' || c=='-' || c=='*' || c=='/';
+    return c=='&' || c=='^' || c=='|';
 }
 
 // определение приоритета операций
 int priority(char c) {
-    if(c=='+' || c=='-')
+    if(c == '^')
         return 1;
-    if(c=='*' || c=='/')
+    if(c == '&')
         return 2;
     return 0;
 }
@@ -54,10 +55,10 @@ int main(void)
     int number;
     char answer[BUFFER_SIZE]={0};
     printf("Input infix string: ");
-    while( (ret = scanf("%d",&number))!=EOF ) {
+    while( (ret = scanf("%d",&number))!= EOF ) {
         int p=0;
         if(ret==1) {
-            sprintf(answer+pos,"%d %n",number,&p);
+            sprintf(answer+pos,"%d %n",number,&p); // форматированная запись в строку
             pos += p;
         } 
         else {
