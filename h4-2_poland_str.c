@@ -48,10 +48,12 @@ _Bool isDigit(char c) {
 
 // определение приоритета операций
 int priority(char c) {
-    if(c == '^')
-        return 1;
     if(c == '&')
+        return 3;
+    if(c == '^')
         return 2;
+    if(c == '|')
+        return 1;
     return 0;
 }
 
@@ -74,12 +76,12 @@ int main(void)
     // цикл обработки входной строки
     for(int i=0; i<len; i++) {
         // анализатор введенных символов (можно было бы использвоть вместо getchar scanf для перевода символов в число)
-        if(isDigit(str[i])) {
+        if(isDigit(str[i])) {            
             // совтавление числа из последовательности знаков (size - кол-во знаков)
             int number, size = 0;
-            for(number = 0; isDigit(str[i]); size++) // пока нам встречаются цифры
+            for(number = 0; isDigit(str[i]); i++, size++) // пока нам встречаются цифры
                 number = number*10 + str[i]-'0'; // -'0' перводим символ в цифру в соответствии с ASCI
-            // печать строки (answer + pos = к началу строки прибавляем позию ставя указатель в конец строки)
+            // печать строки (answer + pos = к началу строки прибавляем позию ставя указатель в конец строки)            
             sprintf(answer+pos,"%d ", number);
             pos += size+1; //передвигаем позицию в строке на размер числа
         } 
@@ -103,10 +105,10 @@ int main(void)
                 }
                 push(c); // отправляем текущий оператор
             } 
-            else if( c=='(' ) {
+            else if(c=='(') 
                 push(c);
-            } 
-            else if( c==')' ) {
+             
+            else if(c==')') {
                 while((c=pop()) != '(') {
                     // добавляем операторы между скобками
                     sprintf(answer+pos,"%c ", c);
@@ -115,10 +117,10 @@ int main(void)
             }              
         }
     }
-    while(!emptyStack()) {
-        sprintf(answer+pos,"%c ", pop());
-        pos += 2; 
-    }
+    // while(!emptyStack()) {
+    //     sprintf(answer+pos,"%c ", pop());
+    //     pos += 2; 
+    // }
     printf("Answer: %s\n", answer);
     return 0; 
 }
