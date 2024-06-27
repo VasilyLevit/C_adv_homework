@@ -9,7 +9,7 @@
 Данные на вход: monty_python python_has_list_comprehensions 
 Данные на выход: 6 */
 
-// !!! Доработать до O(n) 
+// !!! Доработать до O(n) - можно использовать z функцию
 #include <stdio.h>
 #include <string.h>
 enum{maxlength = 10001};

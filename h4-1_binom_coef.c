@@ -15,13 +15,17 @@
 #include <stdio.h>
 #include <stdint.h>
 
+/* функции вычисления биномиального коэффициента
+треугольник паскаля */
 u_int64_t binomCoef(int n, int k) {
-    u_int64_t res = 1;
-    for (int i=n-k+1; i<=n; ++i)
-        res *= i;
-    for (int i=2; i<=k; ++i)
-        res /= i;
-    return res; 
+    const int maxn = n;
+    u_int64_t C[maxn+1][maxn+1];
+    for (int i=0; i<=maxn; ++i) {
+        C[i][0] = C[i][i] = 1; // заполняем строку единицами
+        for (int j=1; j<i; ++j) 
+            C[i][j] = C[i-1][j-1] + C[i-1][j]; // строим треугольник
+    }
+    return C[n][k]; // возвращаем уже один коэффициент
 }
 
 int main (void)
