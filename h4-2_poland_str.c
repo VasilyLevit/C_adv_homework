@@ -49,11 +49,11 @@ _Bool isDigit(char c) {
 // определение приоритета операций
 int priority(char c) {
     if(c == '&')
-        return 3;
+        return 3; // высший приоритет (ранг 8)
     if(c == '^')
-        return 2;
+        return 2; // приоритет ранг 9
     if(c == '|')
-        return 1;
+        return 1; // приоритет ранг 10
     return 0;
 }
 

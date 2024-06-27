@@ -1,5 +1,9 @@
 /* Задание 3. Префикс и суффикс
-Реализовать программу 3-го практического задания более эффективным способом со сложностью О(n) (см. код в лекции).
+Реализовать программу 3-го практического задания: 
+На стандартном потоке ввода задаются две символьные строки, разделённые символом перевода строки. Каждая из строк не превышает по длине 104. В строках не встречаются пробельные символы.
+На стандартный поток вывода напечатайте два числа, разделённых пробелом: первое число — длина наибольшего префикса первой строки, являющегося суффиксом второй; второе число — наоборот, длина наибольшего суффикса первой строки, являющегося префиксом второй. Сравнение символов проводите с учётом регистра (т.е. символы 'a' и 'A' различны).
+
+более эффективным способом со сложностью О(n) (см. код в лекции).
 
 Пример No1
 Данные на вход: don't_panic nick_is_a_mastodon 
@@ -9,61 +13,54 @@
 Данные на вход: monty_python python_has_list_comprehensions 
 Данные на выход: 6 */
 
-// !!! Доработать до O(n) - можно использовать z функцию
 #include <stdio.h>
 #include <string.h>
-enum{maxlength = 10001};
-int search_prefix(char*, char*);
+
+#define SIZE 10001
+
+int min(int a, int b) {
+    return a<b ? a : b;
+}
+
+int max(int z[], int n) {
+    int max = 0;
+    for(size_t i = 0; i < n; i++) {
+        if(z[i]> max)
+            max = z[i];
+    }
+    return max;
+}
+
+void zFunction2 (char *s, int z[]) {
+    int n = strlen(s);
+    for (int i=1, l=0, r=0; i<n; ++i) {
+        if (i <= r)
+            z[i] = min (r-i+1, z[i-l]);
+        while (i+z[i] < n && s[z[i]] == s[i+z[i]])
+            ++z[i];
+        if (i+z[i]-1 > r)
+            l = i,  r = i+z[i]-1;
+    } 
+}
+
+
+int searchPrefix(char *s1, char *s2)
+{
+    char s[SIZE+SIZE] = {0};
+    int z[SIZE+SIZE] = {0};
+    size_t s1len = strlen(s1);
+    size_t s2len = strlen(s2);
+    sprintf(s, "%s#%s", s2, s1);
+    zFunction2(s, z);
+    return max(z + s2len, s1len);
+}
 
 int main () {
-    char s1[maxlength ], s2[maxlength];
-    scanf("%10001s", s1);
-    scanf("%10001s", s2);
-    printf("%d %d\n", search_prefix(s2,s1), search_prefix(s1,s2));
-return 0; }
-
-int search_prefix(char*s1, char*s2)
-{
-    int l1 = strlen(s1);
-    int l2 = strlen(s2);
-    int l = l1<l2 ? l1 : l2;
-    int i1, i2, max=0;
-    char c1, c2;
-    for (i1 = l1-l; i1<l1; i1++)
-    {
-        for(i2 = 0; i2<l2; i2++)
-        c1 = s1[i1+i2];
-        c2 = s2[i2];
-#ifdef DEBUG
-printf("%c/%c ", c1, c2);
-        {
-#endif
-if(c1 != c2 )
-                break;
-}
-#ifdef DEBUG
-printf("\n");
-#endif
-if(s1[l1-1] == s2[i2-1] && i2 > max)
-        max = i2;
-} 
-return max;
-}
-
-// вариант с семинара
-// если длина строки n 0(n^3) т.к. strlen имеет сложность O(n)
-// лучше занести определение длины переменной в переменную и вызывать её, тогда сложность уменьшиться до O(n^2)
-int finMaxPrefSuff(char* str1, char* str2) {
-    for(int i = 0; i < strlen(str1); ++i) {
-        int match = 1;
-        for (j = 0; ((i+j) < strlen(str1)) && j < strlen(str2); ++j) {
-            if(str1[i+j] != str2[j]) {
-                match = 0;
-                break;
-            }
-        }
-        if ((match) && (strlen(str1) - i) <= strlen(str2)) 
-            return strlen(str1) - i;
-    }
-    return 0;
+    char s1[SIZE] = {0};
+    char s2[SIZE] = {0};
+    printf("Введите подряд 2е строки разделяя пробелом: ");
+    scanf("%10000s", s1);
+    scanf("%10000s", s2);
+    printf("%d\n", searchPrefix(s2,s1));
+    return 0; 
 }
