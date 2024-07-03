@@ -10,7 +10,7 @@
 Данные на выход: 3
 
 Пример No2
-Данные на вход: monty_python python_has_list_comprehensions 
+Данные на вход: python_has_list_comprehensions monty_python 
 Данные на выход: 6 */
 
 #include <stdio.h>
@@ -43,14 +43,13 @@ void zFunction2 (char *s, int z[]) {
     } 
 }
 
-
 int searchPrefix(char *s1, char *s2)
 {
-    char s[SIZE+SIZE] = {0};
-    int z[SIZE+SIZE] = {0};
+    char s[SIZE+SIZE] = {0}; // массив для склееной из 2х строки
+    int z[SIZE+SIZE] = {0};  // массив для z-функции
     size_t s1len = strlen(s1);
     size_t s2len = strlen(s2);
-    sprintf(s, "%s#%s", s2, s1);
+    sprintf(s, "%s#%s", s2, s1); // склеиваем 2е строки в одну
     zFunction2(s, z);
     return max(z + s2len, s1len);
 }
